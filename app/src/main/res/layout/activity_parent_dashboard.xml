@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D3D3D3"
+    android:padding="16dp">
+
+    <!-- Welcome Message -->
+    <TextView
+        android:id="@+id/welcomeText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Welcome to the Parent Dashboard, [USER'S NAME]"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:background="@drawable/border_background"
+        android:textColor="#000000"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center" />
+
+    <!-- Child List Section (Wrapped in ScrollView for dynamic height) -->
+    <ScrollView
+        android:id="@+id/childListScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcomeText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="#ADD8E6"
+        android:padding="16dp"
+        android:elevation="4dp">
+
+        <LinearLayout
+            android:id="@+id/childListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- Default message when no children are added -->
+            <TextView
+                android:id="@+id/childMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No child to show yet!"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:gravity="center" />
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Add Child, Settings, and Logout Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/addChildButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="Add Child"
+            android:backgroundTint="#0000FF"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/settingsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="Settings"
+            android:backgroundTint="#0000FF"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:backgroundTint="#0000FF"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</RelativeLayout>

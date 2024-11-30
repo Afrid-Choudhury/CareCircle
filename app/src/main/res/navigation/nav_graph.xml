@@ -1,0 +1,24 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.example.carecircle.ui.DashboardFragment"
+        android:label="DashboardFragment" >
+        <action
+            android:id="@+id/actionDashboardFragmentToMessagesFragment"
+            app:destination="@id/messagesFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/messagesFragment"
+        android:name="com.example.carecircle.ui.MessagesFragment"
+        android:label="MessagesFragment">
+        <argument
+            android:name="isParent"
+            android:defaultValue="false"
+            app:argType="boolean" />
+    </fragment>
+</navigation>

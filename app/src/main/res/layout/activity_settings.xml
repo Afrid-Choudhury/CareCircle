@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/settingsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SETTINGS PAGE"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="32dp"
+            android:layout_marginTop="32dp" />
+
+        <!-- Profile Information -->
+        <TextView
+            android:id="@+id/profileSectionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile Information"
+            android:textSize="18sp"
+            android:textColor="#0000FF"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/profileInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name: \nEmail: \nPhone:"
+            android:textSize="16sp"
+            android:layout_marginBottom="26dp" />
+
+        <Button
+            android:id="@+id/editProfileButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Profile"
+            android:backgroundTint="#0000FF"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="64dp" />
+
+        <!-- Notification Settings -->
+        <TextView
+            android:id="@+id/notificationSectionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notification Settings"
+            android:textSize="18sp"
+            android:textColor="#0000FF"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <Switch
+            android:id="@+id/emailNotificationSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Receive Email Notifications"
+            android:layout_marginBottom="16dp" />
+
+        <Switch
+            android:id="@+id/pushNotificationSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Receive Push Notifications"
+            android:layout_marginBottom="64dp" />
+
+        <!-- Security Settings -->
+        <TextView
+            android:id="@+id/securitySectionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Security Settings"
+            android:textSize="18sp"
+            android:textColor="#0000FF"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <Switch
+            android:id="@+id/twoFactorSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enable Two-Factor Authentication"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/changePasswordButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change Password"
+            android:backgroundTint="#0000FF"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="32dp" />
+    </LinearLayout>
+</ScrollView>
