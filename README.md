@@ -849,11 +849,6 @@ Install required SDKs and tools using Android Studio's SDK Manager:
 
 ---
 
-### Summary ✨  
-The combination of **Firebase**, **AndroidX components**, and **Material Design** ensures that **CareCircle** is scalable, secure, and user-friendly. Each API and package is chosen to optimize performance, simplify development, and enhance the overall user experience.  
-
----
-
 ### Summary 📋  
-The **CareCircle** app integrates advanced **Firebase features** with user-friendly **UI components** to deliver a secure and seamless user experience for parents and children. The app leverages **Firebase's real-time capabilities**, **dynamic UI rendering**, and robust error handling to ensure functionality and reliability.  
+The **CareCircle** app integrates advanced **Firebase features** with user-friendly **UI components** to deliver a secure and seamless user experience for parents and children. The app leverages **Firebase's real-time capabilities**, **dynamic UI rendering**, and robust error handling to ensure functionality and reliability. Each API and package is chosen to optimize performance, simplify development, and enhance the overall user experience. 
 
