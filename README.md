@@ -6,7 +6,7 @@ Ghalia Azam, Afrid Choudhury, Emmanuel Adjei Danso, Esther Bilenkin, Franklin Pi
 ---
 
 ## USER GUIDE 📝  
-**Public URL Link:** 🔗 [CareCircle App Files](https://drive.google.com/drive/folders/1CGu9cWKGXkRsJhyghF-Xv8tuuhKyTdJK?usp=drive_link)  
+**Public URL Link:** 🔗 [CareCircle App Deliverable 3 Materials](https://drive.google.com/drive/folders/1CGu9cWKGXkRsJhyghF-Xv8tuuhKyTdJK?usp=drive_link)  
 
 ---
 
