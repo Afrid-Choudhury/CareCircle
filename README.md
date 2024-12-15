@@ -23,7 +23,7 @@ Welcome to the **CareCircle** app! 🎉 This guide will walk you through the ste
 **For Android Devices:**  
 1. **Download the APK File** 📥  
    - Visit the official public URL link: [CareCircle APK](https://drive.google.com/drive/folders/1CGu9cWKGXkRsJhyghF-Xv8tuuhKyTdJK?usp=drive_link)  
-   - Download the latest APK file (e.g., `CareCircle_v1.0.apk`).  
+   - Download the latest APK file (`CareCircle_v1.0.apk`).  
 
 2. **Allow App Installation from Unknown Sources** 🔓  
    - Go to **Settings > Security > Install Unknown Apps**.  
