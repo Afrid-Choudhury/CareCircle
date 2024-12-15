@@ -1,1 +1,31 @@
 #use your own google-services.json. Thank you!
+
+{
+  "project_info": {
+    "project_number": "your data",
+    "project_id": "your data",
+    "storage_bucket": "your data"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "your data",
+        "android_client_info": {
+          "package_name": "your data"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "your data"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
