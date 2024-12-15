@@ -3,17 +3,17 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.navigation.safeargs.kotlin) // SafeArgs plugin
-    id("com.google.gms.google-services") // Add this line
+    id("com.google.gms.google-services")
 }
 
 android {
     namespace = "com.example.carecircle"
-    compileSdk = 35 //was 34 originally, changed bc error - Esther
+    compileSdk = 35 //was 34 originally, changed bc error
 
     defaultConfig {
         applicationId = "com.example.carecircle"
         minSdk = 23
-        targetSdk = 35 //was 34 originally, changed bc error - Esther
+        targetSdk = 35 //was 34 originally, changed bc error
         versionCode = 1
         versionName = "1.0"
 
@@ -38,7 +38,7 @@ android {
     }
     buildFeatures {
         compose = true
-        viewBinding = true //supports traditional XML layouts - Esther
+        viewBinding = true //supports traditional XML layouts
     }
 }
 

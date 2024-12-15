@@ -9,16 +9,21 @@ import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
+/**
+ * SettingsActivity provides functionalities to view and update user profile information,
+ * toggle notification preferences, enable/disable two-factor authentication,
+ * and change the password securely.
+ */
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var database: DatabaseReference
+    private lateinit var auth: FirebaseAuth // Firebase Authentication reference
+    private lateinit var database: DatabaseReference // Firebase Realtime Database reference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        // Initialize Firebase
+        // Initialize Firebase Authentication and Database
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
@@ -30,7 +35,7 @@ class SettingsActivity : AppCompatActivity() {
         val editProfileButton: TextView = findViewById(R.id.editProfileButton)
         val changePasswordButton: TextView = findViewById(R.id.changePasswordButton)
 
-        // Fetch and display user information
+        // Fetch and display user profile information
         val userId = auth.currentUser?.uid
         if (userId != null) {
             database.child("users").child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
@@ -51,37 +56,37 @@ class SettingsActivity : AppCompatActivity() {
             })
         }
 
-        // Handle Email Notification Toggle
+        // Toggle switches for notification preferences
         emailNotificationSwitch.setOnCheckedChangeListener { _, isChecked ->
             val message = if (isChecked) "Email notifications enabled" else "Email notifications disabled"
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
 
-        // Handle Push Notification Toggle
         pushNotificationSwitch.setOnCheckedChangeListener { _, isChecked ->
             val message = if (isChecked) "Push notifications enabled" else "Push notifications disabled"
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
 
-        // Handle Two-Factor Authentication Toggle
         twoFactorSwitch.setOnCheckedChangeListener { _, isChecked ->
             val message = if (isChecked) "Two-Factor Authentication enabled" else "Two-Factor Authentication disabled"
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
 
-        // Handle Edit Profile Button Click
+        // Handle Edit Profile functionality
         editProfileButton.setOnClickListener {
             showEditProfileDialog()
         }
 
-        // Handle Change Password Button Click
+        // Handle Change Password functionality
         changePasswordButton.setOnClickListener {
             showChangePasswordDialog()
         }
     }
 
+    /**
+     * Displays a dialog to edit user profile information.
+     */
     private fun showEditProfileDialog() {
-        // Inflate the dialog layout
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_edit_profile, null)
 
         val editName = dialogView.findViewById<EditText>(R.id.editName)
@@ -89,9 +94,9 @@ class SettingsActivity : AppCompatActivity() {
         val editPhone = dialogView.findViewById<EditText>(R.id.editPhone)
         val saveChangesButton = dialogView.findViewById<Button>(R.id.saveChangesButton)
 
-        // Pre-fill the fields with the current user data
         val userId = auth.currentUser?.uid
         if (userId != null) {
+            // Pre-fill the fields with current user data
             database.child("users").child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     editName.setText(snapshot.child("name").value.toString())
@@ -109,41 +114,30 @@ class SettingsActivity : AppCompatActivity() {
             })
         }
 
-        // Build the dialog
-        val dialog = AlertDialog.Builder(this)
-            .setView(dialogView)
-            .create()
+        val dialog = AlertDialog.Builder(this).setView(dialogView).create()
 
-        // Handle Save Changes Button
         saveChangesButton.setOnClickListener {
             val newName = editName.text.toString().trim()
             val newEmail = editEmail.text.toString().trim()
             val newPhone = editPhone.text.toString().trim()
 
             if (newName.isNotEmpty() && newEmail.isNotEmpty() && newPhone.isNotEmpty()) {
-                // Update Firebase Realtime Database
-                if (userId != null) {
-                    val updates = mapOf(
-                        "name" to newName,
-                        "email" to newEmail,
-                        "phone" to newPhone
-                    )
-                    database.child("users").child(userId).updateChildren(updates)
-                        .addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                // Update Firebase Authentication (for email update)
-                                auth.currentUser?.updateEmail(newEmail)?.addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
-                                        dialog.dismiss()
-                                    } else {
-                                        Toast.makeText(this, "Failed to update email: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                                    }
-                                }
+                val updates = mapOf("name" to newName, "email" to newEmail, "phone" to newPhone)
+
+                // Update Firebase Database and Firebase Authentication for email
+                database.child("users").child(userId!!).updateChildren(updates).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        auth.currentUser?.updateEmail(newEmail)?.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+                                dialog.dismiss()
                             } else {
-                                Toast.makeText(this, "Failed to update profile.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this, "Failed to update email: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                             }
                         }
+                    } else {
+                        Toast.makeText(this, "Failed to update profile.", Toast.LENGTH_SHORT).show()
+                    }
                 }
             } else {
                 Toast.makeText(this, "All fields are required!", Toast.LENGTH_SHORT).show()
@@ -153,6 +147,9 @@ class SettingsActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    /**
+     * Displays a dialog for securely changing the user's password.
+     */
     private fun showChangePasswordDialog() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_change_password, null)
         val alertDialog = AlertDialog.Builder(this).setView(dialogView).create()
@@ -176,6 +173,9 @@ class SettingsActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
+    /**
+     * Reauthenticates the user with their old password and updates the password.
+     */
     private fun updatePassword(oldPassword: String, newPassword: String, alertDialog: AlertDialog) {
         val user = auth.currentUser
         val email = user?.email
@@ -183,22 +183,20 @@ class SettingsActivity : AppCompatActivity() {
         if (email != null) {
             val credential = EmailAuthProvider.getCredential(email, oldPassword)
 
-            user.reauthenticate(credential)
-                .addOnCompleteListener { reauthTask ->
-                    if (reauthTask.isSuccessful) {
-                        user.updatePassword(newPassword)
-                            .addOnCompleteListener { updateTask ->
-                                if (updateTask.isSuccessful) {
-                                    Toast.makeText(this, "Password updated successfully!", Toast.LENGTH_SHORT).show()
-                                    alertDialog.dismiss()
-                                } else {
-                                    Toast.makeText(this, "Failed to update password: ${updateTask.exception?.message}", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                    } else {
-                        Toast.makeText(this, "Old password is incorrect", Toast.LENGTH_SHORT).show()
+            user.reauthenticate(credential).addOnCompleteListener { reauthTask ->
+                if (reauthTask.isSuccessful) {
+                    user.updatePassword(newPassword).addOnCompleteListener { updateTask ->
+                        if (updateTask.isSuccessful) {
+                            Toast.makeText(this, "Password updated successfully!", Toast.LENGTH_SHORT).show()
+                            alertDialog.dismiss()
+                        } else {
+                            Toast.makeText(this, "Failed to update password: ${updateTask.exception?.message}", Toast.LENGTH_SHORT).show()
+                        }
                     }
+                } else {
+                    Toast.makeText(this, "Old password is incorrect", Toast.LENGTH_SHORT).show()
                 }
+            }
         }
     }
 }

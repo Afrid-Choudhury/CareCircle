@@ -15,22 +15,27 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
+/**
+ * MainActivity handles the user registration process. Users can create accounts with different roles (Child or Parent),
+ * and their data is stored in Firebase Authentication and Realtime Database.
+ */
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var database: DatabaseReference // Firebase Database reference
-    private lateinit var auth: FirebaseAuth // Firebase Authentication reference
+    // Firebase Authentication and Database references
+    private lateinit var database: DatabaseReference
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Initialize Firebase Authentication and Database
+        // Initialize Firebase Authentication and Database references
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
         Log.e("MainActivity", "App started successfully")
 
-        // Reference the Spinner
+        // Reference the Spinner for role selection
         val roleSpinner: Spinner = findViewById(R.id.roleSpinner)
 
         // Define the dropdown options with a placeholder
@@ -38,15 +43,13 @@ class MainActivity : AppCompatActivity() {
 
         // Create an ArrayAdapter to bind the options to the Spinner
         val adapter = ArrayAdapter(
-            this, // Context
-            android.R.layout.simple_spinner_item, // Layout for each item
-            roles // Data source
+            this,
+            android.R.layout.simple_spinner_item,
+            roles
         )
 
         // Set the dropdown style for the Spinner
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        // Attach the adapter to the Spinner
         roleSpinner.adapter = adapter
 
         // Reference input fields and button
@@ -56,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         val passwordField: EditText = findViewById(R.id.passwordField)
         val createAccountButton: Button = findViewById(R.id.createAccountButton)
 
-        // Handle Create Account Button Click
+        // Handle Create Account button click
         createAccountButton.setOnClickListener {
             val name = nameField.text.toString().trim()
             val email = emailField.text.toString().trim()
@@ -64,6 +67,7 @@ class MainActivity : AppCompatActivity() {
             val password = passwordField.text.toString().trim()
             val userType = roleSpinner.selectedItem.toString()
 
+            // Validate input fields
             if (name.isEmpty() || email.isEmpty() || phone.isEmpty() || password.isEmpty() || userType == "Select an option") {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             } else {
@@ -84,19 +88,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Apply blue color to "Sign in"
+        // Apply blue color and make "Sign in" clickable
         val colorSpan = ForegroundColorSpan(Color.BLUE)
         spannableString.setSpan(clickableSpan, 25, 32, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         spannableString.setSpan(colorSpan, 25, 32, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        // Set the styled text to the TextView
         signInText.text = spannableString
         signInText.setOnClickListener {
             clickableSpan.onClick(it)
         }
     }
 
-    // Save user data to Firebase Authentication and Database
+    /**
+     * Saves the user data to Firebase Authentication and Realtime Database.
+     * @param name The user's name
+     * @param email The user's email
+     * @param phone The user's phone number
+     * @param password The user's password
+     * @param userType The user's role (Child or Parent)
+     */
     private fun saveUserData(name: String, email: String, phone: String, password: String, userType: String) {
         // Create a new user in Firebase Authentication
         auth.createUserWithEmailAndPassword(email, password)
@@ -104,7 +114,7 @@ class MainActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val userId = auth.currentUser?.uid
                     if (userId != null) {
-                        // Create a user object to store additional details in Realtime Database
+                        // Create a user object to store in Realtime Database
                         val user = User(name, email, phone, userType)
 
                         database.child("users").child(userId).setValue(user)
@@ -113,20 +123,26 @@ class MainActivity : AppCompatActivity() {
                                     Toast.makeText(this, "Account created successfully!", Toast.LENGTH_SHORT).show()
                                     // Redirect to login screen
                                     startActivity(Intent(this, LoginActivity::class.java))
-                                    finish() // Close the signup screen
+                                    finish()
                                 } else {
                                     Toast.makeText(this, "Failed to save user data: ${dbTask.exception?.message}", Toast.LENGTH_LONG).show()
                                 }
                             }
                     }
                 } else {
-                    // Show error message if user creation in Firebase Authentication fails
+                    // Display error message if user creation fails
                     Toast.makeText(this, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                 }
             }
     }
 
-    // Data class for storing user details
+    /**
+     * Data class representing a user to be stored in Firebase Realtime Database.
+     * @param name The user's name
+     * @param email The user's email
+     * @param phone The user's phone number
+     * @param userType The user's role (Child or Parent)
+     */
     data class User(
         val name: String,
         val email: String,

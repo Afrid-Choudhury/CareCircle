@@ -1,28 +1,32 @@
 package com.example.carecircle
 
-import android.graphics.Typeface
-import android.view.Gravity
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
+/**
+ * ParentDashboardActivity is the main activity for parents.
+ * It displays a welcome message, a list of children, and options for adding children, settings, and logout.
+ */
 class ParentDashboardActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var database: DatabaseReference
-    private lateinit var childListContainer: LinearLayout
-    private lateinit var childMessage: TextView
+    private lateinit var auth: FirebaseAuth // Firebase Authentication reference
+    private lateinit var database: DatabaseReference // Firebase Database reference
+    private lateinit var childListContainer: LinearLayout // Container for displaying the list of children
+    private lateinit var childMessage: TextView // TextView for displaying "No children" message
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parent_dashboard)
 
-        // Initialize Firebase
+        // Initialize Firebase Authentication and Database
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
@@ -34,7 +38,7 @@ class ParentDashboardActivity : AppCompatActivity() {
         childListContainer = findViewById(R.id.childListContainer)
         childMessage = findViewById(R.id.childMessage)
 
-        // Fetch user's name and update the welcome text
+        // Fetch user's name and display a personalized welcome message
         val userId = auth.currentUser?.uid
         if (userId != null) {
             database.child("users").child(userId).child("name")
@@ -53,32 +57,35 @@ class ParentDashboardActivity : AppCompatActivity() {
                     }
                 })
 
-            // Load child list for the user
+            // Load the list of children for the parent user
             loadChildList(userId)
         }
 
-        // Handle Add Child button click
+        // Add child button opens a dialog to add a new child
         addChildButton.setOnClickListener {
             showAddChildDialog(userId)
         }
 
-        // Handle Settings button click
+        // Navigate to settings page
         settingsButton.setOnClickListener {
-            // Navigate to SettingsActivity
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
 
-        // Handle Logout button click
+        // Handle logout by signing out the user and navigating back to the login screen
         logoutButton.setOnClickListener {
-            auth.signOut() // Sign out from Firebase
-            val intent = Intent(this, LoginActivity::class.java) // Redirect to LoginActivity
+            auth.signOut()
+            val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
-            finish() // Close the current activity
+            finish()
         }
     }
 
+    /**
+     * Loads the list of children associated with the parent.
+     * If no children exist, it displays a "No children" message.
+     */
     private fun loadChildList(userId: String?) {
         if (userId == null) return
 
@@ -90,44 +97,23 @@ class ParentDashboardActivity : AppCompatActivity() {
                     if (snapshot.exists()) {
                         childMessage.visibility = TextView.GONE
                         val children = snapshot.children.toList()
-                        val maxVisibleChildren = 4
 
-                        // Display the first 4 children or all children if count <= 4
-                        for ((index, childSnapshot) in children.withIndex()) {
-                            if (index >= maxVisibleChildren) break
-
+                        for (childSnapshot in children) {
+                            val childId = childSnapshot.key
                             val childName = childSnapshot.child("name").value.toString()
-                            val childPhone = childSnapshot.child("phone").value.toString()
 
-                            val childCard = createChildCard(childName, "No new alerts")
+                            // Create a card for each child and set a click listener
+                            val childCard = createChildCard(childName, "Click for details")
+                            childCard.setOnClickListener {
+                                val intent = Intent(this@ParentDashboardActivity, ChildDetailsActivity::class.java)
+                                intent.putExtra("CHILD_ID", childId)
+                                intent.putExtra("CHILD_NAME", childName)
+                                startActivity(intent)
+                            }
                             childListContainer.addView(childCard)
                         }
-
-                        // Add "See More" link if there are more than 4 children
-                        if (children.size > maxVisibleChildren) {
-                            val seeMoreButton = TextView(this@ParentDashboardActivity).apply {
-                                text = "See More"
-                                textSize = 16f
-                                setTextColor(resources.getColor(android.R.color.holo_blue_dark))
-                                setTypeface(null, Typeface.BOLD)
-                                gravity = Gravity.CENTER
-                                setPadding(16, 16, 16, 16)
-                                setOnClickListener {
-                                    // Clear the container and show all children
-                                    childListContainer.removeAllViews()
-                                    for (childSnapshot in children) {
-                                        val childName = childSnapshot.child("name").value.toString()
-                                        val childPhone = childSnapshot.child("phone").value.toString()
-
-                                        val childCard = createChildCard(childName, "No new alerts")
-                                        childListContainer.addView(childCard)
-                                    }
-                                }
-                            }
-                            childListContainer.addView(seeMoreButton)
-                        }
                     } else {
-                        // Show the "No child to show yet!" message
+                        // Show "No children" message
                         childMessage.visibility = TextView.VISIBLE
                         childMessage.text = "No child to show yet!"
                         childListContainer.addView(childMessage)
@@ -144,22 +130,22 @@ class ParentDashboardActivity : AppCompatActivity() {
             })
     }
 
+    /**
+     * Shows a dialog for adding a new child to the parent's account.
+     */
     private fun showAddChildDialog(userId: String?) {
         if (userId == null) return
 
-        // Inflate the dialog layout
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_child, null)
 
         val childNameInput = dialogView.findViewById<EditText>(R.id.childNameInput)
         val childPhoneInput = dialogView.findViewById<EditText>(R.id.childPhoneInput)
         val addChildButton = dialogView.findViewById<Button>(R.id.addChildButton)
 
-        // Build the dialog
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
             .create()
 
-        // Handle Add Child Button Click
         addChildButton.setOnClickListener {
             val childName = childNameInput.text.toString().trim()
             val childPhone = childPhoneInput.text.toString().trim()
@@ -176,8 +162,9 @@ class ParentDashboardActivity : AppCompatActivity() {
                     .setValue(child)
                     .addOnCompleteListener {
                         if (it.isSuccessful) {
+                            addSampleFlaggedMessages(userId, childId, childName)
                             Toast.makeText(this, "Child added successfully!", Toast.LENGTH_SHORT).show()
-                            loadChildList(userId) // Refresh the child list
+                            loadChildList(userId)
                             dialog.dismiss()
                         } else {
                             Toast.makeText(this, "Failed to add child: ${it.exception?.message}", Toast.LENGTH_SHORT).show()
@@ -191,6 +178,44 @@ class ParentDashboardActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    /**
+     * Adds sample flagged messages to the database for testing purposes.
+     */
+    private fun addSampleFlaggedMessages(parentId: String, childId: String, childName: String) {
+        val flaggedMessagesRef = database.child("users").child(parentId).child("flaggedMessages").child(childId)
+
+        val sampleMessages = listOf(
+            mapOf(
+                "sender" to "+1234567890",
+                "date" to "2024-12-01",
+                "childName" to childName,
+                "childPhone" to "+1987654321",
+                "message" to "Let’s meet up somewhere private. You don’t need to tell anyone"
+            ),
+            mapOf(
+                "sender" to "+9876543210",
+                "date" to "2024-12-02",
+                "childName" to childName,
+                "childPhone" to "+1987654321",
+                "message" to "Here’s a link to something you’ll love. Click now!"
+            ),
+            mapOf(
+                "sender" to "+5647382910",
+                "date" to "2024-12-03",
+                "childName" to childName,
+                "childPhone" to "+1987654321",
+                "message" to "Try vaping; everyone’s doing it, and it’s not harmful."
+            )
+        )
+
+        for (message in sampleMessages) {
+            flaggedMessagesRef.push().setValue(message)
+        }
+    }
+
+    /**
+     * Creates a card view for each child.
+     */
     private fun createChildCard(childName: String, alertMessage: String): LinearLayout {
         val childCard = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -218,23 +243,16 @@ class ParentDashboardActivity : AppCompatActivity() {
 
         val childDetails = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
         }
 
         val childNameText = TextView(this).apply {
             text = childName
             textSize = 18f
-            setTextColor(resources.getColor(android.R.color.black))
             setTypeface(null, Typeface.BOLD)
         }
 
         val childAlertText = TextView(this).apply {
             text = alertMessage
-            textSize = 14f
-            setTextColor(resources.getColor(android.R.color.darker_gray))
         }
 
         childDetails.addView(childNameText)
