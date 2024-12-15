@@ -210,9 +210,9 @@ To ensure the **CareCircle** app works as expected, the following testing strate
 
 ---
 
-# Technology Stack for the CareCircle App 💡🔧
+## Technology Stack for the CareCircle App 💡🔧
 
-## 1. Hardware Prerequisites 🔧
+### 1. Hardware Prerequisites 🔧
 - **Device Specifications:**
   - **Development Machine:**
     - Processor: Intel Core i5 or equivalent
@@ -226,7 +226,7 @@ To ensure the **CareCircle** app works as expected, the following testing strate
 
 ---
 
-## 2. Software Prerequisites 🔧
+### 2. Software Prerequisites 🔧
 - **Operating System:**
   - Windows 10/11, macOS 11+ (Big Sur or later), or a Linux-based system.
 - **Android Development Tools:**
@@ -241,7 +241,7 @@ To ensure the **CareCircle** app works as expected, the following testing strate
 
 ---
 
-## 3. Software Dependencies 🛠️
+### 3. Software Dependencies 🛠️
 All dependencies are managed in the `build.gradle.kts` file. Ensure the following packages are installed:
 
 - **AndroidX Libraries:**
@@ -277,7 +277,7 @@ All dependencies are managed in the `build.gradle.kts` file. Ensure the followin
 
 ---
 
-## 4. Required Packages 📚
+### 4. Required Packages 📚
 Install required SDKs and tools using Android Studio's SDK Manager:
 
 - Android SDK Platform-Tools
@@ -287,7 +287,7 @@ Install required SDKs and tools using Android Studio's SDK Manager:
 
 ---
 
-## 5. Development Environment Setup 🚀
+### 5. Development Environment Setup 🚀
 - **Clone the Repository:**
   1. Install Git.
   2. Clone the CareCircle repository:
@@ -306,7 +306,7 @@ Install required SDKs and tools using Android Studio's SDK Manager:
 
 ---
 
-## 6. Testing Environment 🧰
+### 6. Testing Environment 🧰
 - **Android Virtual Device (AVD):**
   - Use Android Studio to create an emulator with:
     - Android 11 (API Level 30) or higher
@@ -319,11 +319,11 @@ Install required SDKs and tools using Android Studio's SDK Manager:
 
 ---
 
-# Setup Guide: Development and Production Environments for CareCircle App
+## Setup Guide: Development and Production Environments for CareCircle App
 
-## 1. Development Environment Setup
+### 1. Development Environment Setup
 
-### Step 1: Install Required Software
+#### Step 1: Install Required Software
 1. **Install Android Studio:**
    - Download the latest version from the official Android Studio website.
    - Follow the installation instructions for your operating system (Windows, macOS, or Linux).
@@ -334,7 +334,7 @@ Install required SDKs and tools using Android Studio's SDK Manager:
 4. **Install Firebase CLI (Optional):**
    - To interact with Firebase services from the command line:
 
-### Step 2: Clone the Repository
+#### Step 2: Clone the Repository
 1. Open a terminal or command prompt.
 2. Run the following commands:
    ```bash
@@ -342,7 +342,7 @@ Install required SDKs and tools using Android Studio's SDK Manager:
    cd CareCircle
    ```
 
-### Step 3: Set Up Android Studio
+#### Step 3: Set Up Android Studio
 1. **Open Project:**
    - Launch Android Studio.
    - Click on "Open" and select the cloned CareCircle directory.
@@ -356,7 +356,7 @@ Install required SDKs and tools using Android Studio's SDK Manager:
      - Android SDK Build-Tools
      - Android Emulator
 
-### Step 4: Configure Firebase
+#### Step 4: Configure Firebase
 1. **Create a Firebase Project:**
    - Go to the Firebase Console.
    - Click "Add Project" and follow the setup wizard.
@@ -375,7 +375,7 @@ Install required SDKs and tools using Android Studio's SDK Manager:
        apply(plugin = "com.google.gms.google-services")
        ```
 
-### Step 5: Set Up Emulator (Optional)
+#### Step 5: Set Up Emulator (Optional)
 1. **Create an Android Virtual Device (AVD):**
    - Open AVD Manager in Android Studio.
    - Select a Pixel device (e.g., Pixel 4) with Android 11 (API Level 30) or higher.
@@ -385,9 +385,9 @@ Install required SDKs and tools using Android Studio's SDK Manager:
 
 ---
 
-## 2. Production Environment Setup
+### 2. Production Environment Setup
 
-### Step 1: Prepare for Release
+#### Step 1: Prepare for Release
 1. **Update `build.gradle.kts`:**
    - Ensure release build type is configured:
      ```kotlin
@@ -429,12 +429,12 @@ Install required SDKs and tools using Android Studio's SDK Manager:
      }
      ```
 
-### Step 2: Build the Release APK
+#### Step 2: Build the Release APK
 1. Open Android Studio.
 2. Go to Build > Build Bundle(s)/APK(s) > Build APK(s).
 3. The signed APK will be available in the `/app/release` directory.
 
-### Step 3: Test the Release APK
+#### Step 3: Test the Release APK
 1. Install the APK on a physical or virtual Android device:
    ```bash
    adb install app-release.apk
