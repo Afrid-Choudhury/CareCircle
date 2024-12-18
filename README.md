@@ -689,7 +689,7 @@ Install required SDKs and tools using Android Studio's SDK Manager:
 
 ---
 
-### 3. Firebase Cloud Messaging (FCM) 📩  
+### 3. Firebase Cloud Messaging (FCM) Future Updates📩  
 - **Description**:  
   FCM is a cross-platform messaging solution for sending notifications and data messages.  
 
@@ -805,17 +805,7 @@ Install required SDKs and tools using Android Studio's SDK Manager:
 
 ---
 
-### 8. Firebase UI 🖥️  
-- **Description**:  
-  Firebase UI is a library for simplifying Firebase integration with Android, including authentication flows.  
-
-- **Why Chosen**:  
-  - Provides pre-built UI components for authentication.  
-  - Reduces development effort for login and registration screens.  
-
----
-
-### 9. Material Components for Android 🎨  
+### 8. Material Components for Android 🎨  
 - **Description**:  
   A library for implementing Material Design in Android apps.  
 
